@@ -4,13 +4,15 @@ import { AppService } from './app.service';
 import { AppServiceMock } from './app.service.stub';
 import { DEFAULT_NAME } from './app.constants';
 import { CatsModule } from './cats/cats.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 /**
  * useValue: expects exact object value of a class new AppServiceMock();
  * useClass: expects exact class AppServiceMock
  */
 @Module({
-  imports: [CatsModule],
+  imports: [CatsModule, AuthModule, UsersModule],
   controllers: [AppController],
   providers: [
     {

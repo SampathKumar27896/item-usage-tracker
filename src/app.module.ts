@@ -1,28 +1,18 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AppServiceMock } from './app.service.stub';
-import { DEFAULT_NAME } from './app.constants';
-import { CatsModule } from './cats/cats.module';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-
-/**
- * useValue: expects exact object value of a class new AppServiceMock();
- * useClass: expects exact class AppServiceMock
- */
+import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseConfigService } from './database/mongoose/mongoose.config.service';
 @Module({
-  imports: [CatsModule, AuthModule, UsersModule],
-  controllers: [AppController],
-  providers: [
-    {
-      provide: AppService,
-      useClass: AppServiceMock,
-    },
-    {
-      provide: 'DEFAULT_NAME',
-      useValue: DEFAULT_NAME,
-    },
+  imports: [
+    ConfigModule.forRoot(),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useClass: MongooseConfigService,
+    }),
   ],
+  controllers: [AppController],
+  providers: [AppService, MongooseConfigService],
 })
 export class AppModule {}
